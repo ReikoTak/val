@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valorant Lineups Pro - Guide Stratégique</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f1923 0%, #1e3a5f 100%);
+            min-height: 100vh;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #ff4655 0%, #ff6b7a 100%);
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .agent-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e3a5f 0%, #0f1923 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .lineup-video {
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f1923 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .play-button {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 70, 85, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+            background: rgba(255, 70, 85, 1);
+        }
+
+        .difficulty-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .difficulty-easy {
+            background: #10b981;
+            color: white;
+        }
+
+        .difficulty-medium {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .difficulty-hard {
+            background: #ef4444;
+            color: white;
+        }
+
+        .tab-active {
+            border-bottom: 3px solid #ff4655;
+            color: #ff4655;
+        }
+
+        .filter-btn {
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 70, 85, 0.1);
+            color: #ff4655;
+        }
+
+        .filter-btn.active {
+            background: #ff4655;
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .lineup-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1a2332;
+            border-radius: 12px;
+            max-width: 900px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 70, 85, 0.5);
+        }
+    </style>
+</head>
+<body class="text-white">
+    <!-- Navigation -->
+    <nav class="bg-gray-900/95 backdrop-blur-sm fixed w-full top-0 z-50 border-b border-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-8">
+                    <h1 class="text-2xl font-bold hero-gradient bg-clip-text text-transparent">VALORANT LINEUPS</h1>
+                    <div class="hidden md:flex space-x-6">
+                        <a href="#" class="hover:text-red-400 transition">Accueil</a>
+                        <a href="#lineups" class="hover:text-red-400 transition">Lineups</a>
+                        <a href="#agents" class="hover:text-red-400 transition">Agents</a>
+                        <a href="#maps" class="hover:text-red-400 transition">Maps</a>
+                    </div>
+                </div>
+                <button class="md:hidden" onclick="toggleMobileMenu()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-24 pb-12 px-4">
+        <div class="container mx-auto text-center">
+            <h2 class="text-5xl md:text-6xl font-bold mb-6 fade-in">
+                Maîtrisez vos <span class="hero-gradient bg-clip-text text-transparent">Lineups</span>
+            </h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto fade-in">
+                Découvrez les meilleurs lineups pour dominer vos parties sur Valorant. Des stratégies professionnelles pour tous les agents et toutes les maps.
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center fade-in">
+                <button class="px-6 py-3 hero-gradient text-white rounded-lg font-semibold hover:opacity-90 transition">
+                    Explorer les Lineups
+                </button>
+                <button class="px-6 py-3 bg-gray-800 text-white rounded-lg font-semibold hover:bg-gray-700 transition">
+                    Guide Débutant
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="py-8 px-4">
+        <div class="container mx-auto">
+            <div class="bg-gray-800/50 backdrop-blur rounded-xl p-6">
+                <div class="flex flex-wrap gap-4 mb-6">
+                    <select id="agentFilter" class="bg-gray-700 text-white px-4 py-2 rounded-lg">
+                        <option value="all">Tous les Agents</option>
+                        <option value="sova">Sova</option>
+                        <option value="viper">Viper</option>
+                        <option value="brimstone">Brimstone</option>
+                        <option value="kayo">KAY/O</option>
+                        <option value="killjoy">Killjoy</option>
+                    </select>
+                    <select id="mapFilter" class="bg-gray-700 text-white px-4 py-2 rounded-lg">
+                        <option value="all">Toutes les Maps</option>
+                        <option value="ascent">Ascent</option>
+                        <option value="bind">Bind</option>
+                        <option value="haven">Haven</option>
+                        <option value="split">Split</option>
+                        <option value="breeze">Breeze</option>
+                        <option value="icebox">Icebox</option>
+                    </select>
+                    <div class="flex gap-2">
+                        <button class="filter-btn px-4 py-2 rounded-lg bg-gray-700 active">Tous</button>
+                        <button class="filter-btn px-4 py-2 rounded-lg bg-gray-700">Attaque</button>
+                        <button class="filter-btn px-4 py-2 rounded-lg bg-gray-700">Défense</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lineups Grid -->
+    <section id="lineups" class="py-12 px-4">
+        <div class="container mx-auto">
+            <h3 class="text-3xl font-bold mb-8">Lineups Populaires</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Lineup Card 1 -->
+                <div class="bg-gray-800/50 backdrop-blur rounded-xl overflow-hidden card-hover cursor-pointer" onclick="openModal('lineup1')">
+                    <div class="lineup-video">
+                        <div class="play-button">
+                            <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M6 4l12 6-12 6V4z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="agent-icon">S</div>
+                                <div>
+                                    <h4 class="font-bold">Sova - Recon Bolt</h4>
+                                    <p class="text-sm text-gray-400">Ascent - Site A</p>
+                                </div>
+                            </div>
+                            <span class="difficulty-badge difficulty-easy">Facile</span>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-4">Flèche de reconnaissance parfaite pour révéler les ennemis sur le site A depuis A Main.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-400">📍 A Main → Site A</span>
+                            <span class="text-sm text-gray-400">⚔️ Attaque</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lineup Card 2 -->
+                <div class="bg-gray-800/50 backdrop-blur rounded-xl overflow-hidden card-hover cursor-pointer" onclick="openModal('lineup2')">
+                    <div class="lineup-video">
+                        <div class="play-button">
+                            <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M6 4l12 6-12 6V4z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="agent-icon">V</div>
+                                <div>
+                                    <h4 class="font-bold">Viper - Snake Bite</h4>
+                                    <p class="text-sm text-gray-400">Bind - Site B</p>
+                                </div>
+                            </div>
+                            <span class="difficulty-badge difficulty-medium">Moyen</span>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-4">Lineup post-plant depuis B Long pour empêcher le défuse sur le spike default.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-400">📍 B Long → Spike</span>
+                            <span class="text-sm text-gray-400">⚔️ Attaque</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lineup Card 3 -->
+                <div class="bg-gray-800/50 backdrop-blur rounded-xl overflow-hidden card-hover cursor-pointer" onclick="openModal('lineup3')">
+                    <div class="lineup-video">
+                        <div class="play-button">
+                            <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M6 4l12 6-12 6V4z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="agent-icon">B</div>
+                                <div>
+                                    <h4 class="font-bold">Brimstone - Molotov</h4>
+                                    <p class="text-sm text-gray-400">Haven - Site C</p>
+                                </div>
+                            </div>
+                            <span class="difficulty-badge difficulty-easy">Facile</span>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-4">Molotov lineup pour clear le coin back site C depuis C Long.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-400">📍 C Long → Back Site</span>
+                            <span class="text-sm text-gray-400">⚔️ Attaque</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lineup Card 4 -->
+                <div class="bg-gray-800/50 backdrop-blur rounded-xl overflow-hidden card-hover cursor-pointer" onclick="openModal('lineup4')">
+                    <div class="lineup-video">
+                        <div class="play-button">
+                            <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M6 4l12 6-12 6V4z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="agent-icon">K</div>
+                                <div>
+                                    <h4 class="font-bold">KAY/O - Grenade</h4>
+                                    <p class="text-sm text-gray-400">Split - Site A</p>
+                                </div>
+                            </div>
+                            <span class="difficulty-badge difficulty-hard">Difficile</span>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-4">Grenade lineup avancé pour clear heaven et screens simultanément.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-400">📍 A Main → Heaven</span>
+                            <span class="text-sm text-gray-400">⚔️ Attaque</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lineup Card 5 -->
+                <div class="bg-gray-800/50 backdrop-blur rounded-xl overflow-hidden card-hover cursor-pointer" onclick="openModal('lineup5')">
+                    <div class="lineup-video">
+                        <div class="play-button">
+                            <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M6 4l12 6-12 6V4z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="agent-icon">KJ</div>
+                                <div>
+                                    <h4 class="font-bold">Killjoy - Nanoswarm</h4>
+                                    <p class="text-sm text-gray-400">Breeze - Site A</p>
+                                </div>
+                            </div>
+                            <span class="difficulty-badge difficulty-medium">Moyen</span>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-4">Setup défensif avec nanoswarms pour contrôler les entrées sur A.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-400">📍 Site A → Entrées</span>
+                            <span class="text-sm text-gray-400">🛡️ Défense</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lineup Card 6 -->
+                <div class="bg-gray-800/50 backdrop-blur rounded-xl overflow-hidden card-hover cursor-pointer" onclick="openModal('lineup6')">
+                    <div class="lineup-video">
+                        <div class="play-button">
+                            <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M6 4l12 6-12 6V4z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="agent-icon">S</div>
+                                <div>
+                                    <h4 class="font-bold">Sova - Shock Dart</h4>
+                                    <p class="text-sm text-gray-400">Icebox - Site B</p>
+                                </div>
+                            </div>
+                            <span class="difficulty-badge difficulty-hard">Difficile</span>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-4">Double shock dart lineup pour éliminer les défusers sur le spike default.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-400">📍 B Main → Spike</span>
+                            <span class="text-sm text-gray-400">⚔️ Attaque</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tips Section -->
+    <section class="py-12 px-4 bg-gray-900/50">
+        <div class="container mx-auto">
+            <h3 class="text-3xl font-bold mb-8 text-center">Conseils Pro</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-800/50 backdrop-blur rounded-xl p-6">
+                    <div class="w-12 h-12 hero-gradient rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold mb-2">Précision</h4>
+                    <p class="text-gray-300">Entraînez-vous en custom game pour perfectionner vos lineups. La répétition est la clé.</p>
+                </div>
+                <div class="bg-gray-800/50 backdrop-blur rounded-xl p-6">
+                    <div class="w-12 h-12 hero-gradient rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold mb-2">Timing</h4>
+                    <p class="text-gray-300">Apprenez les timings parfaits pour vos lineups post-plant et maximisez leur efficacité.</p>
+                </div>
+                <div class="bg-gray-800/50 backdrop-blur rounded-xl p-6">
+                    <div class="w-12 h-12 hero-gradient rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold mb-2">Communication</h4>
+                    <p class="text-gray-300">Coordonnez vos lineups avec votre équipe pour des combos dévastateurs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal -->
+    <div id="lineupModal" class="modal">
+        <div class="modal-content">
+            <div class="close-modal" onclick="closeModal()">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </div>
+            <div class="p-8">
+                <h3 id="modalTitle" class="text-2xl font-bold mb-4">Détails du Lineup</h3>
+                <div class="lineup-video mb-6" style="height: 400px;">
+                    <div class="play-button">
+                        <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M6 4l12 6-12 6V4z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-bold mb-2 text-red-400">Instructions</h4>
+                        <ol class="list-decimal list-inside space-y-2 text-gray-300">
+                            <li>Positionnez-vous au coin indiqué</li>
+                            <li>Alignez votre crosshair avec le repère visuel</li>
+                            <li>Chargez votre capacité au maximum</li>
+                            <li>Relâchez et observez le résultat</li>
+                        </ol>
+                    </div>
+                    <div>
+                        <h4 class="font-bold mb-2 text-red-400">Points Clés</h4>
+                        <ul class="list-disc list-inside space-y-2 text-gray-300">
+                            <li>Fonctionne à chaque round</li>
+                            <li>Nécessite une position précise</li>
+                            <li>Timing : 3-4 secondes après le plant</li>
+                            <li>Dégâts garantis sur le défuseur</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-800 py-8 px-4 mt-12">
+        <div class="container mx-auto text-center">
+            <p class="text-gray-400 mb-4">© 2024 Valorant Lineups Pro. Tous droits réservés.</p>
+            <div class="flex justify-center space-x-6">
+                <a href="#" class="text-gray-400 hover:text-red-400 transition">Discord</a>
+                <a href="#" class="text-gray-400 hover:text-red-400 transition">YouTube</a>
+                <a href="#" class="text-gray-400 hover:text-red-400 transition">Twitter</a>
+                <a href="#" class="text-gray-400 hover:text-red-400 transition">Twitch</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Filter buttons functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Modal functionality
+        function openModal(lineupId) {
+            const modal = document.getElementById('lineupModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('lineupModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Close modal on background click
+        document.getElementById('lineupModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            // Implementation for mobile menu
+            console.log('Mobile menu toggled');
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Filter functionality
+        document.getElementById('agentFilter').addEventListener('change', function() {
+            console.log('Agent filter changed to:', this.value);
+            // Add filter logic here
+        });
+
+        document.getElementById('mapFilter').addEventListener('change', function() {
+            console.log('Map filter changed to:', this.value);
+            // Add filter logic here
+        });
+    </script>
+</body>
+</html>
